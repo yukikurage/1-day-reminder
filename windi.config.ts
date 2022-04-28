@@ -6,5 +6,5 @@ export default defineConfig({
   extract: {
     include: ["./**/*.{html,js,jsx,ts,tsx}"],
   },
-  plugins: [transform("daisyui")],
+  plugins: [],
 });

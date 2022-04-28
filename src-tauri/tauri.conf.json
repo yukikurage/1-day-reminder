@@ -52,13 +52,13 @@
     "windows": [
       {
         "title": "1 Day Reminder",
-        "width": 800,
-        "height": 600,
+        "width": 300,
+        "height": 400,
         "resizable": true,
         "fullscreen": false,
-        "decorations": false,
+        "alwaysOnTop": true,
         "transparent": true,
-        "alwaysOnTop": true
+        "decorations": false
       }
     ],
     "security": {
