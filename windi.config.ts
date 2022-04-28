@@ -1,6 +1,10 @@
-import { defineConfig } from "windicss/helpers";
+import { defineConfig } from "vite-plugin-windicss";
+import { transform } from "windicss/helpers";
 
 export default defineConfig({
-  theme: {},
-  plugins: [],
+  darkMode: "media",
+  extract: {
+    include: ["./**/*.{html,js,jsx,ts,tsx}"],
+  },
+  plugins: [transform("daisyui")],
 });
