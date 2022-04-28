@@ -1,10 +1,18 @@
-import { defineConfig } from 'vite';
-import solidPlugin from 'vite-plugin-solid';
+import { defineConfig } from "vite";
+import WindiCSS from "vite-plugin-windicss";
+import solidPlugin from "vite-plugin-solid";
 
 export default defineConfig({
-  plugins: [solidPlugin()],
+  plugins: [
+    solidPlugin(),
+    WindiCSS({
+      scan: {
+        fileExtensions: ["html", "js", "ts", "jsx", "tsx"],
+      },
+    }),
+  ],
   build: {
-    target: 'esnext',
+    target: "esnext",
     polyfillDynamicImport: false,
   },
 });
