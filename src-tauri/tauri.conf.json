@@ -54,9 +54,11 @@
         "title": "1 Day Reminder",
         "width": 300,
         "height": 400,
+        "minWidth": 300,
+        "minHeight": 400,
         "resizable": true,
         "fullscreen": false,
-        "alwaysOnTop": true,
+        "alwaysOnTop": false,
         "transparent": true,
         "decorations": false
       }

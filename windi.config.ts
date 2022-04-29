@@ -1,10 +1,19 @@
 import { defineConfig } from "vite-plugin-windicss";
-import { transform } from "windicss/helpers";
 
 export default defineConfig({
   darkMode: "media",
+  theme: {
+    extend: {
+      fontFamily: {
+        display: ["Lobster", "cursive"],
+      },
+    },
+  },
   extract: {
     include: ["./**/*.{html,js,jsx,ts,tsx}"],
   },
-  plugins: [],
+  plugins: [
+    require("@windicss/plugin-icons"),
+    require("@windicss/plugin-scrollbar"),
+  ],
 });
