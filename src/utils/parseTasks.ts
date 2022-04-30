@@ -3,14 +3,18 @@ export const parseTasks = (str: string) => {
   const tasks: Task[] = [];
 
   lines.forEach((line) => {
-    if (line.startsWith('o ')) {
-      const task = { finished: false, content: line.substring(2) };
+    const lineTrimmed = line.trim();
+
+    if (lineTrimmed.startsWith('o ')) {
+      const task = { finished: false, content: lineTrimmed.substring(2) };
       tasks.push(task);
-    } else if (line.startsWith('x ')) {
-      const task = { finished: true, content: line.substring(2) };
+    } else if (lineTrimmed.startsWith('x ')) {
+      const task = { finished: true, content: lineTrimmed.substring(2) };
       tasks.push(task);
-    } else if (line !== '') {
-      tasks[tasks.length - 1].content += '\n' + line;
+    } else if (lineTrimmed !== '' && tasks.length > 0) {
+      tasks[tasks.length - 1].content += '\n' + lineTrimmed;
+    } else if (lineTrimmed !== '' && tasks.length === 0) {
+      tasks.push({ finished: false, content: lineTrimmed });
     }
   });
 

@@ -5,6 +5,8 @@ import { printTasks } from './utils/printTasks';
 import RenderTasks from './components/RenderTasks';
 
 const milliSecondsInDay = 24 * 60 * 60 * 1000;
+const getDayNum = (milliSeconds: number) =>
+  Math.floor(milliSeconds / milliSecondsInDay);
 
 const App: Component = () => {
   let editor: HTMLTextAreaElement | undefined = undefined;
@@ -27,7 +29,27 @@ const App: Component = () => {
     localStorage.setItem('tasks-tomorrow', printTasks(tomorrowTasks()));
   };
 
-  const loadTasks = () => {
+  const toNextDay = () => {
+    const prevDayNumAsString = localStorage.getItem('day-num');
+    const prevDayNum = prevDayNumAsString
+      ? parseInt(prevDayNumAsString, 10)
+      : 0;
+    const nowDayNum = getDayNum(Date.now());
+
+    if (nowDayNum - prevDayNum > 1) {
+      setTodayTasks([]);
+      setTomorrowTasks([]);
+    }
+    if (nowDayNum - prevDayNum === 1) {
+      setTodayTasks(tomorrowTasks());
+      setTomorrowTasks([]);
+    }
+
+    localStorage.setItem('day-num', nowDayNum.toString());
+    saveTasks();
+  };
+
+  onMount(() => {
     const today = localStorage.getItem('tasks-today');
     const tomorrow = localStorage.getItem('tasks-tomorrow');
     if (today) {
@@ -36,17 +58,11 @@ const App: Component = () => {
     if (tomorrow) {
       setTomorrowTasks(parseTasks(tomorrow));
     }
-  };
 
-  const toNextDay = () => {
-    setTodayTasks(tomorrowTasks());
-    setTomorrowTasks([]);
-  };
+    toNextDay();
 
-  onMount(() => {
-    loadTasks();
     const remainingTime = milliSecondsInDay - (Date.now() % milliSecondsInDay);
-    setTimeout(toNextDay, remainingTime);
+    setTimeout(toNextDay, remainingTime + 10000);
     console.log(remainingTime);
   });
 
