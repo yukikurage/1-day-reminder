@@ -62,7 +62,9 @@ const App: Component = () => {
       setTomorrowTasks(parseTasks(tomorrow));
     }
 
-    toNextDay();
+    const remainingTime = milliSecondsInDay - (Date.now() % milliSecondsInDay);
+    setTimeout(toNextDay, 0);
+    setTimeout(toNextDay, remainingTime + 10000);
   });
 
   return (
