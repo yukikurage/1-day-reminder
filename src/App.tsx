@@ -5,8 +5,12 @@ import { printTasks } from './utils/printTasks';
 import RenderTasks from './components/RenderTasks';
 
 const milliSecondsInDay = 24 * 60 * 60 * 1000;
-const getDayNum = (milliSeconds: number) =>
-  Math.floor(milliSeconds / milliSecondsInDay);
+const getDayNum = () => {
+  const now = Date.now();
+  const start = new Date('Jan 01 2000').getTime();
+  const diff = now - start;
+  return Math.floor(diff / milliSecondsInDay);
+};
 
 const App: Component = () => {
   let editor: HTMLTextAreaElement | undefined = undefined;
@@ -19,14 +23,11 @@ const App: Component = () => {
   const setTasks = (tasks: Task[]) => {
     if (isToday()) {
       setTodayTasks(tasks);
+      localStorage.setItem('tasks-today', printTasks(tasks));
     } else {
       setTomorrowTasks(tasks);
+      localStorage.setItem('tasks-tomorrow', printTasks(tasks));
     }
-  };
-
-  const saveTasks = () => {
-    localStorage.setItem('tasks-today', printTasks(todayTasks()));
-    localStorage.setItem('tasks-tomorrow', printTasks(tomorrowTasks()));
   };
 
   const toNextDay = () => {
@@ -34,7 +35,9 @@ const App: Component = () => {
     const prevDayNum = prevDayNumAsString
       ? parseInt(prevDayNumAsString, 10)
       : 0;
-    const nowDayNum = getDayNum(Date.now());
+    const nowDayNum = getDayNum();
+
+    console.log(nowDayNum - prevDayNum);
 
     if (nowDayNum - prevDayNum > 1) {
       setTodayTasks([]);
@@ -46,12 +49,12 @@ const App: Component = () => {
     }
 
     localStorage.setItem('day-num', nowDayNum.toString());
-    saveTasks();
   };
 
   onMount(() => {
     const today = localStorage.getItem('tasks-today');
     const tomorrow = localStorage.getItem('tasks-tomorrow');
+
     if (today) {
       setTodayTasks(parseTasks(today));
     }
@@ -60,10 +63,6 @@ const App: Component = () => {
     }
 
     toNextDay();
-
-    const remainingTime = milliSecondsInDay - (Date.now() % milliSecondsInDay);
-    setTimeout(toNextDay, remainingTime + 10000);
-    console.log(remainingTime);
   });
 
   return (
@@ -98,11 +97,10 @@ const App: Component = () => {
                   tasks={tasks()}
                   onChange={(newTasks) => {
                     setTasks(newTasks);
-                    saveTasks();
                   }}
                 />
                 <button
-                  class="absolute right-3 bottom-3  px-3 py-1 rounded-md bg-pink-600 hover:bg-pink-700 transition"
+                  class="absolute right-3 bottom-3 h-8 w-10 rounded-md bg-pink-600 hover:bg-pink-700 transition"
                   onClick={() => {
                     setIsOpenEditor(true);
                     editor?.focus();
@@ -120,11 +118,10 @@ const App: Component = () => {
                 onClose={(value) => {
                   setTasks(parseTasks(value));
                   setIsOpenEditor(false);
-                  saveTasks();
                 }}
               />
               <button
-                class="absolute right-3 bottom-3  px-3 py-1 rounded-md bg-pink-600 hover:bg-pink-700 transition"
+                class="absolute right-3 bottom-3 h-8 w-10 rounded-md bg-pink-600 hover:bg-pink-700 transition"
                 onClick={() => {
                   if (editor) {
                     setTasks(parseTasks(editor.value));
