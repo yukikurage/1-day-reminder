@@ -20,6 +20,9 @@ const Editor = (props: {
           props.onClose(e.currentTarget.value);
         }
       }}
+      onBlur={(e) => {
+        props.onClose(e.currentTarget.value);
+      }}
     />
   );
 };

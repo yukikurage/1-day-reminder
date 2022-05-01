@@ -1,4 +1,11 @@
-import { Component, createMemo, createSignal, onMount, Show } from 'solid-js';
+import {
+  Component,
+  createEffect,
+  createMemo,
+  createSignal,
+  onMount,
+  Show,
+} from 'solid-js';
 import Editor from './components/Editor';
 import { parseTasks } from './utils/parseTasks';
 import { printTasks } from './utils/printTasks';
@@ -14,8 +21,12 @@ const getDayNum = () => {
 
 const App: Component = () => {
   let editor: HTMLTextAreaElement | undefined = undefined;
-  const [todayTasks, setTodayTasks] = createSignal<Task[]>([]);
-  const [tomorrowTasks, setTomorrowTasks] = createSignal<Task[]>([]);
+  const [todayTasks, setTodayTasks] = createSignal<Task[] | undefined>(
+    undefined
+  );
+  const [tomorrowTasks, setTomorrowTasks] = createSignal<Task[] | undefined>(
+    undefined
+  );
   const [isOpenEditor, setIsOpenEditor] = createSignal(false);
   const [isToday, setIsToday] = createSignal(true);
 
@@ -23,12 +34,18 @@ const App: Component = () => {
   const setTasks = (tasks: Task[]) => {
     if (isToday()) {
       setTodayTasks(tasks);
-      localStorage.setItem('tasks-today', printTasks(tasks));
     } else {
       setTomorrowTasks(tasks);
-      localStorage.setItem('tasks-tomorrow', printTasks(tasks));
     }
   };
+
+  createEffect(() => {
+    const _todayTasks = todayTasks();
+    const _tomorrowTasks = tomorrowTasks();
+    _todayTasks && localStorage.setItem('tasks-today', printTasks(_todayTasks));
+    _tomorrowTasks &&
+      localStorage.setItem('tasks-tomorrow', printTasks(_tomorrowTasks));
+  });
 
   const toNextDay = () => {
     const prevDayNumAsString = localStorage.getItem('day-num');
@@ -96,7 +113,7 @@ const App: Component = () => {
             fallback={
               <div class="h-full w-full overflow-hidden p-2 font-md relative">
                 <RenderTasks
-                  tasks={tasks()}
+                  tasks={tasks() ?? []}
                   onChange={(newTasks) => {
                     setTasks(newTasks);
                   }}
@@ -116,7 +133,7 @@ const App: Component = () => {
             <div class="h-full w-full p-2 font-md relative">
               <Editor
                 ref={editor}
-                value={printTasks(tasks())}
+                value={printTasks(tasks() ?? [])}
                 onClose={(value) => {
                   setTasks(parseTasks(value));
                   setIsOpenEditor(false);
