@@ -11,7 +11,7 @@ const RenderTasks = (props: {
           <div data-tauri-drag-region class="flex flex-row gap-2 items-start">
             <input
               type="checkbox"
-              class="placeholder-pink-600 w-4 h-4 m-1"
+              class="w-4 h-4 m-1"
               checked={finished}
               onChange={() =>
                 props.onChange(

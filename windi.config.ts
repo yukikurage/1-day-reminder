@@ -1,19 +1,19 @@
-import { defineConfig } from "vite-plugin-windicss";
+import { defineConfig } from 'vite-plugin-windicss';
 
 export default defineConfig({
-  darkMode: "media",
+  darkMode: 'media',
   theme: {
     extend: {
       fontFamily: {
-        display: ["Lobster", "cursive"],
+        display: ['Water Brush', 'cursive'],
       },
     },
   },
   extract: {
-    include: ["./**/*.{html,js,jsx,ts,tsx}"],
+    include: ['./**/*.{html,js,jsx,ts,tsx}'],
   },
   plugins: [
-    require("@windicss/plugin-icons"),
-    require("@windicss/plugin-scrollbar"),
+    require('@windicss/plugin-icons'),
+    require('@windicss/plugin-scrollbar'),
   ],
 });
