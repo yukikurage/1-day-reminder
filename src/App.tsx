@@ -89,7 +89,7 @@ const App: Component = () => {
 
     const remainingTime = getMilliSecondsInDay();
     setTimeout(toNextDay, 0);
-    setTimeout(toNextDay, remainingTime + 10000);
+    // setTimeout(toNextDay, remainingTime + 10000);
   });
 
   return (

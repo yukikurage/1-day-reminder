@@ -10,7 +10,7 @@ const Editor = (props: {
   return (
     <textarea
       ref={props.ref}
-      class="w-full h-full rounded-md p-1  font-mono outline-gray-300 resize-none"
+      class="w-full h-full rounded-md p-1 font-mono outline-gray-300 resize-none"
       value={text()}
       onInput={(e) => {
         setText(e.currentTarget.value);
